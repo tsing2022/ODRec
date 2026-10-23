@@ -1,0 +1,256 @@
+{
+  "version": "16personalities-60-items",
+  "source": "https://www.16personalities.com/free-personality-test",
+  "source_kind": "16Personalities questionnaire",
+  "abstention": null,
+  "questions": [
+    {
+      "id": 1,
+      "text": "You regularly make new friends."
+    },
+    {
+      "id": 2,
+      "text": "Complex and novel ideas excite you more than simple and straightforward ones."
+    },
+    {
+      "id": 3,
+      "text": "You usually feel more persuaded by what resonates emotionally with you than by factual arguments."
+    },
+    {
+      "id": 4,
+      "text": "Your living and working spaces are clean and organized."
+    },
+    {
+      "id": 5,
+      "text": "You usually stay calm, even under a lot of pressure."
+    },
+    {
+      "id": 6,
+      "text": "You find the idea of networking or promoting yourself to strangers very daunting."
+    },
+    {
+      "id": 7,
+      "text": "You prioritize and plan tasks effectively, often completing them well before the deadline."
+    },
+    {
+      "id": 8,
+      "text": "People’s stories and emotions speak louder to you than numbers or data."
+    },
+    {
+      "id": 9,
+      "text": "You like to use organizing tools like schedules and lists."
+    },
+    {
+      "id": 10,
+      "text": "Even a small mistake can cause you to doubt your overall abilities and knowledge."
+    },
+    {
+      "id": 11,
+      "text": "You feel comfortable just walking up to someone you find interesting and striking up a conversation."
+    },
+    {
+      "id": 12,
+      "text": "You are not too interested in discussions about various interpretations of creative works."
+    },
+    {
+      "id": 13,
+      "text": "You prioritize facts over people’s feelings when determining a course of action."
+    },
+    {
+      "id": 14,
+      "text": "You often allow the day to unfold without any schedule at all."
+    },
+    {
+      "id": 15,
+      "text": "You rarely worry about whether you make a good impression on people you meet."
+    },
+    {
+      "id": 16,
+      "text": "You enjoy participating in team-based activities."
+    },
+    {
+      "id": 17,
+      "text": "You enjoy experimenting with new and untested approaches."
+    },
+    {
+      "id": 18,
+      "text": "You prioritize being sensitive over being completely honest."
+    },
+    {
+      "id": 19,
+      "text": "You actively seek out new experiences and knowledge areas to explore."
+    },
+    {
+      "id": 20,
+      "text": "You are prone to worrying that things will take a turn for the worse."
+    },
+    {
+      "id": 21,
+      "text": "You enjoy solitary hobbies or activities more than group ones."
+    },
+    {
+      "id": 22,
+      "text": "You cannot imagine yourself writing fictional stories for a living."
+    },
+    {
+      "id": 23,
+      "text": "You favor efficiency in decisions, even if it means disregarding some emotional aspects."
+    },
+    {
+      "id": 24,
+      "text": "You prefer to do your chores before allowing yourself to relax."
+    },
+    {
+      "id": 25,
+      "text": "In disagreements, you prioritize proving your point over preserving the feelings of others."
+    },
+    {
+      "id": 26,
+      "text": "You usually wait for others to introduce themselves first at social gatherings."
+    },
+    {
+      "id": 27,
+      "text": "Your mood can change very quickly."
+    },
+    {
+      "id": 28,
+      "text": "You are not easily swayed by emotional arguments."
+    },
+    {
+      "id": 29,
+      "text": "You often end up doing things at the last possible moment."
+    },
+    {
+      "id": 30,
+      "text": "You enjoy debating ethical dilemmas."
+    },
+    {
+      "id": 31,
+      "text": "You usually prefer to be around others rather than on your own."
+    },
+    {
+      "id": 32,
+      "text": "You become bored or lose interest when the discussion gets highly theoretical."
+    },
+    {
+      "id": 33,
+      "text": "When facts and feelings conflict, you usually find yourself following your heart."
+    },
+    {
+      "id": 34,
+      "text": "You find it challenging to maintain a consistent work or study schedule."
+    },
+    {
+      "id": 35,
+      "text": "You rarely second-guess the choices that you have made."
+    },
+    {
+      "id": 36,
+      "text": "Your friends would describe you as lively and outgoing."
+    },
+    {
+      "id": 37,
+      "text": "You are drawn to various forms of creative expression, such as writing."
+    },
+    {
+      "id": 38,
+      "text": "You usually base your choices on objective facts rather than emotional impressions."
+    },
+    {
+      "id": 39,
+      "text": "You like to have a to-do list for each day."
+    },
+    {
+      "id": 40,
+      "text": "You rarely feel insecure."
+    },
+    {
+      "id": 41,
+      "text": "You avoid making phone calls."
+    },
+    {
+      "id": 42,
+      "text": "You enjoy exploring unfamiliar ideas and viewpoints."
+    },
+    {
+      "id": 43,
+      "text": "You can easily connect with people you have just met."
+    },
+    {
+      "id": 44,
+      "text": "If your plans are interrupted, your top priority is to get back on track as soon as possible."
+    },
+    {
+      "id": 45,
+      "text": "You are still bothered by mistakes that you made a long time ago."
+    },
+    {
+      "id": 46,
+      "text": "You are not too interested in discussing theories on what the world could look like in the future."
+    },
+    {
+      "id": 47,
+      "text": "Your emotions control you more than you control them."
+    },
+    {
+      "id": 48,
+      "text": "When making decisions, you focus more on how the affected people might feel than on what is most logical or efficient."
+    },
+    {
+      "id": 49,
+      "text": "Your personal work style is closer to spontaneous bursts of energy than organized and consistent efforts."
+    },
+    {
+      "id": 50,
+      "text": "When someone thinks highly of you, you wonder how long it will take them to feel disappointed in you."
+    },
+    {
+      "id": 51,
+      "text": "You would love a job that requires you to work alone most of the time."
+    },
+    {
+      "id": 52,
+      "text": "You believe that pondering abstract philosophical questions is a waste of time."
+    },
+    {
+      "id": 53,
+      "text": "You feel more drawn to busy, bustling atmospheres than to quiet, intimate places."
+    },
+    {
+      "id": 54,
+      "text": "If a decision feels right to you, you often act on it without needing further proof."
+    },
+    {
+      "id": 55,
+      "text": "You often feel overwhelmed."
+    },
+    {
+      "id": 56,
+      "text": "You complete things methodically without skipping over any steps."
+    },
+    {
+      "id": 57,
+      "text": "You prefer tasks that require you to come up with creative solutions rather than follow concrete steps."
+    },
+    {
+      "id": 58,
+      "text": "You are more likely to rely on emotional intuition than logical reasoning when making a choice."
+    },
+    {
+      "id": 59,
+      "text": "You struggle with deadlines."
+    },
+    {
+      "id": 60,
+      "text": "You feel confident that things will work out for you."
+    }
+  ],
+  "answer_scale": {
+    "1": "strongly agree",
+    "2": "agree",
+    "3": "slightly agree",
+    "4": "slightly disagree",
+    "5": "disagree",
+    "6": "strongly disagree"
+  }
+}

@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.env*
+datasets/
+checkpoints/
+agent_memory/
+agent_output/
+*.npy
+*.npz
+*.pkl
+*.pt
+*.pth
+*.safetensors

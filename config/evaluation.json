@@ -1,0 +1,17 @@
+{
+  "data": {
+    "name": "SCD"
+  },
+  "model": {
+    "embedding_size": 32,
+    "layer_num": 2
+  },
+  "gpt": 8,
+  "mbti": 8,
+  "social": true,
+  "profile": true,
+  "MBTI": true,
+  "relu": true,
+  "w_1": "kexuexi",
+  "channel": "0,1,2"
+}
