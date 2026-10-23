@@ -15,7 +15,7 @@
 
 Each call receives the complete subject profile. The Reflector also receives the accepted-answer history. Memory is separated by user and role and checked against profile, prompt, questionnaire, and model-setting hashes.
 
-`questionnaire.json` contains 60 items from 16Personalities. The six options run from strongly agree (1) to strongly disagree (6). Unsupported items retain a null answer. A response string is exported when all items have supported answers.
+`questionnaire.json` contains 60 items from 16Personalities. The six rated options run from strongly agree (1) to strongly disagree (6). Unsupported items retain null in the answer record and are exported as neutral digit 0 for submission.
 
 ## Usage
 
@@ -45,7 +45,7 @@ python -m unittest -v test_questionnaire_agent test_cognitive_agent
 
 ## Questionnaire reports
 
-Each item answer is an integer from 1 to 6, or null when the profile does not support an answer. Completed numeric responses are exported in question order as both a 60-element `item_responses` list and a 60-character `answer_string`. The crawler accepts only 60 digits in `1..6` and does not fill null answers.
+Each item answer is an integer from 1 to 6, or null when the profile does not support an answer. The 60-element `item_responses` list preserves these original answers. The `submission_responses` list and 60-character `answer_string` represent each null as 0. The crawler accepts 60 digits in `0..6`, or a 60-element answer list, and maps null/0 to the questionnaire's neutral score 0.
 
 Install the crawler dependency in this directory:
 
@@ -60,7 +60,7 @@ python cognitive_agent.py --profiles /path/to/profiles.json \
   --execute --crawl --report-dir personality_reports
 ```
 
-The crawler uses the questionnaire order in `questionnaire.json` and maps `1,2,3,4,5,6` to `-3,-2,-1,1,2,3`. It submits the 60 question/answer pairs to `/test-results`, then retrieves the report from `/api/type-descriptions/results` in the same session. Reports retain their answer and questionnaire hashes for resumption. The `--crawl` path writes the returned report text into `semantic_texts.self_kernel` and `semantic_texts.partner_kernel`; the numeric answers remain in `kernels`.
+The crawler uses the questionnaire order in `questionnaire.json` and maps `1,2,3,4,5,6` to `-3,-2,-1,1,2,3`, with null/0 mapped to neutral score `0` between `-1` and `1`. It submits the 60 question/answer pairs to `/test-results`, then retrieves the report from `/api/type-descriptions/results` in the same session. Reports retain their answer and questionnaire hashes for resumption. The `--crawl` path writes the returned report text into `semantic_texts.self_kernel` and `semantic_texts.partner_kernel`; the original and submission answers remain in `kernels`.
 
 Retrieve reports from an existing completed agent result:
 

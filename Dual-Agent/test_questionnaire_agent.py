@@ -79,7 +79,9 @@ class QuestionnaireTests(unittest.TestCase):
         bank = {"questions": [BANK["questions"][0]]}
         agent, _ = self.agent([null, OK], bank=bank)
         proxy = export_proxy(agent.run("A", PROFILE), bank)
-        self.assertIsNone(proxy["answer_string"])
+        self.assertEqual(proxy["answer_string"], "0")
+        self.assertEqual(proxy["submission_responses"], [0])
+        self.assertEqual(proxy["item_responses"], [None])
         self.assertIn("insufficient profile evidence", proxy["proxy_text"])
 
     def test_completed_session_resumes_without_api_calls(self):

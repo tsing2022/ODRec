@@ -10,7 +10,7 @@ from pathlib import Path
 from questionnaire_agent import HERE, atomic_json, fingerprint, read_json, validate_bank
 
 BASE_URL = "https://www.16personalities.com"
-ANSWER_SCORES = {1: -3, 2: -2, 3: -1, 4: 1, 5: 2, 6: 3}
+ANSWER_SCORES = {0: 0, 1: -3, 2: -2, 3: -1, 4: 1, 5: 2, 6: 3}
 
 
 class CrawlerError(RuntimeError):
@@ -22,15 +22,15 @@ def validate_answers(answers, bank):
     if [q["id"] for q in bank["questions"]] != list(range(1, 61)):
         raise ValueError("The crawler requires the 60 questions in ID order 1..60")
     if isinstance(answers, str):
-        if re.fullmatch(r"[1-6]{60}", answers) is None:
-            raise ValueError("answer_string must contain exactly 60 ASCII digits 1..6")
+        if re.fullmatch(r"[0-6]{60}", answers) is None:
+            raise ValueError("answer_string must contain exactly 60 ASCII digits 0..6")
         values = [int(x) for x in answers]
     elif isinstance(answers, (list, tuple)):
-        values = list(answers)
+        values = [0 if value is None else value for value in answers]
     else:
         raise ValueError("Answers must be a 60-digit string or a list of 60 integers")
     if len(values) != 60 or any(type(x) is not int or x not in ANSWER_SCORES for x in values):
-        raise ValueError("Every answer must be an integer 1..6; null answers cannot be submitted")
+        raise ValueError("Every answer must be an integer 0..6 or null (neutral)")
     return values
 
 
@@ -201,21 +201,31 @@ class PersonalityCrawler:
         return result
 
 
+def kernel_submission_values(kernel, bank):
+    if not isinstance(kernel, dict) or kernel.get("questionnaire_sha256") != fingerprint(bank):
+        raise ValueError("Agent output uses a different questionnaire")
+    values = validate_answers(kernel.get("item_responses"), bank)
+    if validate_answers(kernel.get("submission_responses", values), bank) != values:
+        raise ValueError("submission_responses and item_responses disagree")
+    answer_string = kernel.get("answer_string")
+    legacy_abstention = answer_string is None and any(value is None for value in kernel["item_responses"])
+    if not legacy_abstention and validate_answers(answer_string, bank) != values:
+        raise ValueError("answer_string and item_responses disagree")
+    return values
+
+
 def attach_reports(result, bank, crawler, output_dir):
     if not isinstance(result, dict) or result.get("status") != "complete":
         raise ValueError("Only a completed cognitive-agent result can be submitted")
     ready = {}
     for role in ("self", "partner"):
         kernel = result.get("kernels", {}).get(role, {})
-        if kernel.get("questionnaire_sha256") != fingerprint(bank):
-            raise ValueError("Agent output uses a different questionnaire")
-        values = validate_answers(kernel.get("answer_string"), bank)
-        if values != kernel.get("item_responses"):
-            raise ValueError("answer_string and item_responses disagree")
-        ready[role] = values
+        ready[role] = kernel_submission_values(kernel, bank)
     updated = copy.deepcopy(result)
     updated["questionnaire_reports"] = {}
     for role in ("self", "partner"):
+        updated["kernels"][role]["answer_string"] = "".join(map(str, ready[role]))
+        updated["kernels"][role]["submission_responses"] = ready[role]
         report = crawler.submit(ready[role], bank, result["subject_id"], role, output_dir)
         updated["questionnaire_reports"][role] = report
         updated["semantic_texts"][role + "_kernel"] = report["report_text"]
@@ -240,8 +250,9 @@ def main(argv=None):
             parser.error("--agent-result must contain a completed cognitive-agent result")
         for role in ("self", "partner"):
             kernel = result.get("kernels", {}).get(role, {})
-            values = validate_answers(kernel.get("answer_string"), bank)
-            if kernel.get("questionnaire_sha256") != fingerprint(bank) or values != kernel.get("item_responses"):
+            try:
+                kernel_submission_values(kernel, bank)
+            except ValueError:
                 parser.error("Agent output does not match the questionnaire or answer string")
         subjects = {str(result["subject_id"]): None}
     else:

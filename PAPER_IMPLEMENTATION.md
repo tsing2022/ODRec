@@ -8,7 +8,7 @@ The Analyst answers one item at a time with supporting quotations. Schema and ev
 
 The output contains self persona, self kernel, partner persona and partner kernel texts. `Dual-Agent/questionnaire.json` and `Dual-Agent/prompts.json` contain the item bank and prompts.
 
-The agent exports each completed questionnaire as 60 integer responses and a 60-digit answer string. The optional `--crawl` stage in `Dual-Agent/personality_crawler.py` maps these responses to the questionnaire service's signed scale, retrieves both reports and supplies their text as the corresponding kernel representations.
+The agent retains the original item responses and exports 60 submission digits, mapping null answers to neutral digit 0. The optional `--crawl` stage in `Dual-Agent/personality_crawler.py` maps these digits to the questionnaire service's signed scale (0 to neutral 0; 1..6 to -3,-2,-1,1,2,3), retrieves both reports and supplies their text as the corresponding kernel representations.
 
 ## Inference
 

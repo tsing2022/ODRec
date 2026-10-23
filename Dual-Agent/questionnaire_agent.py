@@ -285,11 +285,13 @@ def export_proxy(state, bank):
     values = [r["answer"]["answer"] for r in records]
 
 
-    answer_string = "".join(str(x) for x in values) if all(x is not None for x in values) else None
+    submission_values = [0 if x is None else x for x in values]
+    answer_string = "".join(str(x) for x in submission_values)
     text = "\n".join("Q{}: {} Response: {}.".format(r["question_id"], r["question"],
         r["answer"]["answer"] if r["answer"]["answer"] is not None else "insufficient profile evidence") for r in records)
     return {"subject_id": state["subject_id"], "agent_role": state["agent_role"],
         "implementation_version": VERSION, "questionnaire_sha256": state["questionnaire_sha256"],
         "profile_sha256": state["profile_sha256"], "item_responses": values,
+        "submission_responses": submission_values,
         "answer_string": answer_string, "proxy_text": text,
         "scoring": "questionnaire item responses"}

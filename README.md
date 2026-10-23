@@ -20,7 +20,7 @@ cd Dual-Agent
 python cognitive_agent.py --profiles example_profiles.json
 ```
 
-For generation, configure `OPENAI_API_KEY` and add `--execute`. Add `--crawl` to retrieve questionnaire reports from each agent's 60-digit answer string and use the report text as its kernel representation. See [Dual-Agent/README.md](Dual-Agent/README.md).
+For generation, configure `OPENAI_API_KEY` and add `--execute`. Add `--crawl` to retrieve questionnaire reports from each agent's 60-digit answer string and use the report text as its kernel representation. Null item answers use neutral digit 0 for submission. See [Dual-Agent/README.md](Dual-Agent/README.md).
 
 ## Evaluate saved scores
 

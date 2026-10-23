@@ -84,11 +84,11 @@ class CrawlerTests(unittest.TestCase):
         self.assertEqual([q["answer"] for q in payload["questions"]], [-3, -2, -1, 1, 2, 3] * 10)
         self.assertEqual([q["text"] for q in payload["questions"]], [q["text"] for q in BANK["questions"]])
         self.assertNotIn("subject_id", payload)
-        self.assertEqual(ANSWER_SCORES, {1: -3, 2: -2, 3: -1, 4: 1, 5: 2, 6: 3})
+        self.assertEqual(ANSWER_SCORES, {0: 0, 1: -3, 2: -2, 3: -1, 4: 1, 5: 2, 6: 3})
 
     def test_invalid_or_incomplete_answers_are_rejected(self):
         for answers in ["1" * 59, "1" * 61, "7" * 60, "０" * 60,
-                        [True] * 60, [None] * 60, [1.0] * 60, None]:
+                        [True] * 60, [1.0] * 60, None]:
             with self.assertRaises(ValueError):
                 validate_answers(answers, BANK)
         bank = copy.deepcopy(BANK); bank["questions"].reverse()
@@ -169,6 +169,39 @@ class CrawlerTests(unittest.TestCase):
         text = render_report(report)
         self.assertIn("Visible", text)
         self.assertNotIn("ignore this", text)
+
+    def test_null_and_zero_are_submitted_as_neutral(self):
+        self.assertEqual(validate_answers([None] * 60, BANK), [0] * 60)
+        self.assertEqual(validate_answers("0" * 60, BANK), [0] * 60)
+        payload = build_payload([None, 1, 2, 3, 4, 5, 6] + [None] * 53, BANK)
+        self.assertEqual([q["answer"] for q in payload["questions"][:7]], [0, -3, -2, -1, 1, 2, 3])
+
+    def test_sixty_digit_export_preserves_raw_null_answers(self):
+        replies = []
+        for question in BANK["questions"]:
+            missing = question["id"] in (1, 30, 60)
+            replies.extend([{"question_id": question["id"], "answer": None if missing else 2,
+                             "confidence": 0 if missing else 0.8,
+                             "evidence": [] if missing else [{"field": "text", "quote": "Profile evidence"}]},
+                            {"approve": True, "issues": []}])
+        state = QuestionnaireAgent(ScriptedTransport(replies), BANK, self.tmp.name).run(
+            "A", {"text": "Profile evidence"})
+        exported = export_proxy(state, BANK)
+        self.assertEqual(len(exported["answer_string"]), 60)
+        self.assertEqual([i for i, x in enumerate(exported["answer_string"], 1) if x == "0"], [1, 30, 60])
+        self.assertIsNone(exported["item_responses"][29])
+        self.assertEqual(exported["submission_responses"][29], 0)
+        self.assertEqual(build_payload(exported["answer_string"], BANK)["questions"][29]["answer"], 0)
+
+    def test_legacy_null_export_can_be_submitted_without_regeneration(self):
+        crawler, session = self.crawler([Response(), Response({}), Response(REPORT)] * 2)
+        source = self.agent_output()
+        source["kernels"]["partner"]["item_responses"][17] = None
+        source["kernels"]["partner"]["answer_string"] = None
+        result = attach_reports(source, BANK, crawler, self.tmp.name)
+        self.assertEqual(session.calls[4][2]["json"]["questions"][17]["answer"], 0)
+        self.assertEqual(result["kernels"]["partner"]["answer_string"][17], "0")
+        self.assertIsNone(result["kernels"]["partner"]["item_responses"][17])
 
     def test_cognitive_cli_passes_sixty_answers_to_crawler(self):
         from cognitive_agent import main as cognitive_main
