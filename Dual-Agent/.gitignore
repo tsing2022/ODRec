@@ -1,5 +1,6 @@
 agent_memory/
 agent_output/
+personality_reports/
 *.lock
 .env
 __pycache__/

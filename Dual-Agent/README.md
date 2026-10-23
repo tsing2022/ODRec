@@ -33,7 +33,7 @@ python cognitive_agent.py --profiles /private/profiles.json \
   --model gpt-3.5-turbo-0125 --execute
 ```
 
-`OPENAI_BASE_URL` selects an HTTPS OpenAI-compatible endpoint. The runner uses the Python standard library.
+`OPENAI_BASE_URL` selects an HTTPS OpenAI-compatible endpoint. The agent runner uses the Python standard library; the optional crawler uses Requests.
 
 Outputs include reviewed personas, item responses, and four semantic texts. Keep profiles, memory, and generated outputs outside the public repository.
 
@@ -42,3 +42,31 @@ Outputs include reviewed personas, item responses, and four semantic texts. Keep
 ```bash
 python -m unittest -v test_questionnaire_agent test_cognitive_agent
 ```
+
+## Questionnaire reports
+
+Each item answer is an integer from 1 to 6, or null when the profile does not support an answer. Completed numeric responses are exported in question order as both a 60-element `item_responses` list and a 60-character `answer_string`. The crawler accepts only 60 digits in `1..6` and does not fill null answers.
+
+Install the crawler dependency in this directory:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+Generate both agents and retrieve their questionnaire reports:
+
+```bash
+python cognitive_agent.py --profiles /path/to/profiles.json \
+  --execute --crawl --report-dir personality_reports
+```
+
+The crawler uses the questionnaire order in `questionnaire.json` and maps `1,2,3,4,5,6` to `-3,-2,-1,1,2,3`. It submits the 60 question/answer pairs to `/test-results`, then retrieves the report from `/api/type-descriptions/results` in the same session. Reports retain their answer and questionnaire hashes for resumption. The `--crawl` path writes the returned report text into `semantic_texts.self_kernel` and `semantic_texts.partner_kernel`; the numeric answers remain in `kernels`.
+
+Retrieve reports from an existing completed agent result:
+
+```bash
+python personality_crawler.py --agent-result agent_output/subject.json \
+  --output-dir personality_reports --execute
+```
+
+The crawler also accepts a JSON object mapping subject IDs to 60-digit strings through `--answers-json`. Without `--execute`, this command validates the answers and prints its plan. Report text includes the service's personality traits, career, personal-growth and relationship sections.

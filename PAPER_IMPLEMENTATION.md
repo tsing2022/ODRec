@@ -8,6 +8,8 @@ The Analyst answers one item at a time with supporting quotations. Schema and ev
 
 The output contains self persona, self kernel, partner persona and partner kernel texts. `Dual-Agent/questionnaire.json` and `Dual-Agent/prompts.json` contain the item bank and prompts.
 
+The agent exports each completed questionnaire as 60 integer responses and a 60-digit answer string. The optional `--crawl` stage in `Dual-Agent/personality_crawler.py` maps these responses to the questionnaire service's signed scale, retrieves both reports and supplies their text as the corresponding kernel representations.
+
 ## Inference
 
 `odrec_eval/model.py` retains the ODRec forward scorer and parameter names for loading a fixed state dictionary.

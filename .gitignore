@@ -5,6 +5,7 @@ datasets/
 checkpoints/
 agent_memory/
 agent_output/
+personality_reports/
 *.npy
 *.npz
 *.pkl

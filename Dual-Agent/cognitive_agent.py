@@ -85,7 +85,11 @@ def main(argv=None):
     parser.add_argument("--model", default="gpt-3.5-turbo-0125")
     parser.add_argument("--max-rounds", type=int, choices=range(1, 11), default=3)
     parser.add_argument("--execute", action="store_true")
+    parser.add_argument("--crawl", action="store_true", help="Retrieve reports from the completed 60-answer strings")
+    parser.add_argument("--report-dir", default="personality_reports")
     args = parser.parse_args(argv)
+    if args.crawl and not args.execute:
+        parser.error("--crawl requires --execute")
     profiles, bank = read_json(args.profiles), read_json(args.questionnaire)
     validate_bank(bank)
     if not isinstance(profiles, dict) or not profiles:
@@ -101,9 +105,19 @@ def main(argv=None):
         return 0
     agent = CognitiveAgent(OpenAIChatTransport(**settings), bank, args.memory_dir,
         max_rounds=args.max_rounds, model_settings=settings)
+    if args.crawl:
+        from personality_crawler import PersonalityCrawler, attach_reports, CrawlerError
+        crawler = PersonalityCrawler()
     incomplete = False
     for subject_id, profile in profiles.items():
         result = agent.run(subject_id, profile)
+        if args.crawl and result["status"] == "complete":
+            try:
+                result = attach_reports(result, bank, crawler, args.report_dir)
+            except (ValueError, CrawlerError) as error:
+                result["status"] = "needs_review"
+                result["stage"] = "questionnaire_report"
+                result["report_error"] = str(error)
         incomplete = incomplete or result["status"] != "complete"
         atomic_json(Path(args.output_dir) / (fingerprint(str(subject_id)) + ".json"), result)
     return 2 if incomplete else 0
