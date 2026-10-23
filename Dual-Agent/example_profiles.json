@@ -1,0 +1,9 @@
+{
+  "synthetic_user_A": {
+    "social_habits": "I regularly make new friends and enjoy meeting new people.",
+    "planning": "I plan tasks and keep my workspace organized."
+  },
+  "synthetic_user_B": {
+    "social_habits": "I prefer solitary hobbies and rarely attend group events."
+  }
+}

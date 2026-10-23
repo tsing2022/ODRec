@@ -1,10 +1,26 @@
 # ODRec
 
-Evaluation code for ODRec directed follow recommendation.
+Agent construction and evaluation for ODRec directed follow recommendation.
+
+## Structure
+
+- `Dual-Agent/`: Self-Agent and Inner Twin Soul construction with Analyst/Reflector review.
+- `odrec_eval/model.py`: collaborative memory, semantic projections, compatibility scoring and decision arbiter.
+- `evaluate.py`: checkpoint scoring and metric evaluation.
+- `config/evaluation.json`: inference settings.
 
 ## Setup
 
 Use Python 3.9 or later and install `requirements.txt`.
+
+## Agents
+
+```bash
+cd Dual-Agent
+python cognitive_agent.py --profiles example_profiles.json
+```
+
+For generation, configure `OPENAI_API_KEY` and add `--execute`. See [Dual-Agent/README.md](Dual-Agent/README.md).
 
 ## Evaluate saved scores
 
@@ -22,16 +38,13 @@ python evaluate.py --checkpoint /path/to/odrec.pth \
   --feature-dir /path/to/datasets/SCD --config config/evaluation.json
 ```
 
-Checkpoint evaluation uses externally supplied model weights, a normalized collaborative role graph, candidate records and four semantic feature matrices. These inputs are not bundled. See [the input specification](docs/DATA_FORMAT.md).
-
-The public release contains inference and metric evaluation. Training, optimization and agent-generation executables are not included. Questionnaire items and prompts are supplied in `Dual-Agent/` as method materials.
+See [the input specification](docs/DATA_FORMAT.md).
 
 ## Checks
 
 ```bash
 python -m unittest discover -s tests
+python -m unittest discover -s Dual-Agent -p 'test_*.py'
 ```
 
-The checks use synthetic temporary inputs. They do not reproduce the paper's dataset results.
-
-See [PAPER_IMPLEMENTATION.md](PAPER_IMPLEMENTATION.md) for the inference components and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for attribution.
+See [PAPER_IMPLEMENTATION.md](PAPER_IMPLEMENTATION.md) for the method components and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for attribution.
